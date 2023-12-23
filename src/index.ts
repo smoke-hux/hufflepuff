@@ -100,6 +100,7 @@
 
 
 // Import necessary modules and interfaces from the Azle library
+// Import necessary modules and interfaces from the Azle library
 import { Canister, query, text, update, Void } from 'azle';
 
 // Define the PlasticWasteTokenContract interface
@@ -116,6 +117,7 @@ class PlasticWasteTokenContractImpl implements PlasticWasteTokenContract {
   private totalTokens: number = 0;
   private educationalContent: string = "Learn more about plastic waste management...";
   private userStatistics: { [userId: string]: { totalTokens: number; withdrawalLimit: number } } = {};
+  private static readonly userId: string = "user123"; // Replace with proper user identification
 
   // Convert plastic waste weight to tokens
   async convertToTokens(kgs: number): Promise<void> {
@@ -126,18 +128,17 @@ class PlasticWasteTokenContractImpl implements PlasticWasteTokenContract {
     // For simplicity, let's assume 1 kg = 1 token
     const tokens = kgs;
 
-    const userId = "user123"; // Replace with proper user identification
-    if (!this.userStatistics[userId]) {
-      this.userStatistics[userId] = { totalTokens: 0, withdrawalLimit: 10 }; // Set an example withdrawal limit
+    if (!this.userStatistics[PlasticWasteTokenContractImpl.userId]) {
+      this.userStatistics[PlasticWasteTokenContractImpl.userId] = { totalTokens: 0, withdrawalLimit: 10 }; // Set an example withdrawal limit
     }
 
     // Update the total tokens for the user and global total tokens
-    this.userStatistics[userId].totalTokens += tokens;
+    this.userStatistics[PlasticWasteTokenContractImpl.userId].totalTokens += tokens;
     this.totalTokens += tokens;
 
     // You may also perform additional actions or store data in the canister's state
 
-    console.log(`${kgs} kgs converted to ${tokens} tokens for user ${userId}`);
+    console.log(`${kgs} kgs converted to ${tokens} tokens for user ${PlasticWasteTokenContractImpl.userId}`);
   }
 
   // Get the total tokens
@@ -152,20 +153,18 @@ class PlasticWasteTokenContractImpl implements PlasticWasteTokenContract {
 
   // Get user statistics including total tokens and withdrawal limit
   async getUserStatistics(): Promise<{ totalTokens: number; withdrawalLimit: number }> {
-    const userId = "user123"; // Replace with proper user identification
-    return this.userStatistics[userId] || { totalTokens: 0, withdrawalLimit: 10 }; // Default withdrawal limit example
+    return this.userStatistics[PlasticWasteTokenContractImpl.userId] || { totalTokens: 0, withdrawalLimit: 10 }; // Default withdrawal limit example
   }
 
   // Withdraw tokens if the user has reached the withdrawal limit
   async withdrawTokens(): Promise<void> {
-    const userId = "user123"; // Replace with proper user identification
-    const userStats = this.userStatistics[userId];
+    const userStats = this.userStatistics[PlasticWasteTokenContractImpl.userId];
 
     if (userStats && userStats.totalTokens >= userStats.withdrawalLimit) {
-      console.log(`Withdraw ${userStats.totalTokens} tokens for user ${userId}`);
+      console.log(`Withdraw ${userStats.totalTokens} tokens for user ${PlasticWasteTokenContractImpl.userId}`);
       userStats.totalTokens = 0; // Reset the total tokens for the user
     } else {
-      console.log(`Withdrawal not allowed for user ${userId}. Total tokens: ${userStats.totalTokens}`);
+      console.log(`Withdrawal not allowed for user ${PlasticWasteTokenContractImpl.userId}. Total tokens: ${userStats.totalTokens}`);
     }
   }
 }
