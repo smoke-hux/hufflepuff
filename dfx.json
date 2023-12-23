@@ -1,0 +1,13 @@
+{
+    "canisters": {
+        "hufflepuff": {
+            "type": "custom",
+            "main": "src/index.ts",
+            "candid": "src/index.did",
+            "build": "npx azle hufflepuff",
+            "wasm": ".azle/hufflepuff/hufflepuff.wasm",
+            "gzip": true
+        }
+    }
+}
+
